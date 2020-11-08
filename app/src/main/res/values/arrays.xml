@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <array name="pref_sort_labels">
+        <item>Top Rated</item>
+        <item>Most Users</item>
+    </array>
+
+    <array name="pref_sort_keys">
+        <item>top_rated_key</item>
+        <item>most_users_key</item>
+    </array>
+</resources>
