@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.andre.projects.animemanager">
+    package="com.andre.projects.moviesmanager">
 
-    <uses-permission android:name="aandroid.permission.INTERNET" />
+    <uses-permission android:name="android.permission.INTERNET" />
 
     <application
         android:allowBackup="true"
@@ -11,12 +11,24 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.AnimeManager">
-        <activity android:name=".SettingsActivity"></activity>
-        <activity android:name=".MainActivity">
+        <activity android:name="com.andre.projects.moviesmanager.SettingsActivity"></activity>
+        <activity android:name="com.andre.projects.moviesmanager.MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW"/>
+
+                <category android:name="android.intent.category.DEFAULT"/>
+                <category android:name="android.intent.category.BROWSABLE"/>
+
+                <data
+                    android:host="callback"
+                    android:scheme="animemanager"/>
+
             </intent-filter>
         </activity>
     </application>

@@ -1,3 +1,4 @@
 <resources>
     <string name="app_name">Anime Manager</string>
+    <string name="api_key_client_id"> 389577fe59f1cb514f18840bca9a4002</string>
 </resources>

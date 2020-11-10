@@ -1,4 +1,4 @@
-package com.andre.projects.animemanager;
+package com.andre.projects.moviesmanager;
 
 import android.content.SharedPreferences;
 import android.os.Bundle;

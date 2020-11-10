@@ -1,4 +1,4 @@
-package com.andre.projects.animemanager;
+package com.andre.projects.moviesmanager;
 
 import android.content.Context;
 import android.view.LayoutInflater;
@@ -10,13 +10,17 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.andre.projects.moviesmanager.network.response.FilmResponse;
+
+import java.util.List;
+
 public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapter.ViewHolder> {
 
-    private String[] mData;
+    private List<FilmResponse> mData;
     private LayoutInflater mInflater;
     private ItemClickListener mClickListener;
 
-    RecyclerViewAdapter(Context context, String[] data){
+    RecyclerViewAdapter(Context context, List<FilmResponse> data){
         this.mInflater = LayoutInflater.from(context);
         this.mData = data;
     }
@@ -31,12 +35,12 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
     @Override
     public void onBindViewHolder(@NonNull RecyclerViewAdapter.ViewHolder holder, int position) {
         //holder.mAnimeImageButton.setText(mData[position]);
-        holder.mNameTextView.setText(mData[position]);
+        holder.mNameTextView.setText(mData.get(position).getTitle());
     }
 
     @Override
     public int getItemCount() {
-        return mData.length;
+        return mData.size();
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
@@ -55,10 +59,6 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
         public void onClick(View v) {
             if (mClickListener != null) mClickListener.onItemClick(v, getAdapterPosition());
         }
-    }
-
-    String getItem(int id){
-        return mData[id];
     }
 
     void setClickListener(ItemClickListener itemClickListener) {

@@ -1,4 +1,4 @@
-package com.andre.projects.animemanager;
+package com.andre.projects.moviesmanager;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
