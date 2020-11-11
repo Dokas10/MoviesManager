@@ -13,4 +13,13 @@
         <item name="android:statusBarColor" tools:targetApi="l">#258EA6</item>
         <!-- Customize your theme here. -->
     </style>
+
+    <style name="Theme.AnimeManager.NoActionBar">
+        <item name="windowActionBar">false</item>
+        <item name="windowNoTitle">true</item>
+    </style>
+
+    <style name="Theme.AnimeManager.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />
+
+    <style name="Theme.AnimeManager.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
 </resources>

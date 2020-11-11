@@ -5,16 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content">
 
-    <TextView
-        android:id="@+id/animeName"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_margin="5dp"
-        android:textColor="@color/black"
-        android:gravity="center"
-        android:background="@color/white"/>
-
-    <ImageButton
+    <ImageView
         android:id="@+id/animeImage"
         android:layout_width="match_parent"
         android:layout_height="250dp"

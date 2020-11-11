@@ -1,41 +1,41 @@
-package com.andre.projects.moviesmanager;
+package com.andre.projects.moviesmanager.main_activity;
 
-import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageButton;
-import android.widget.TextView;
+import android.widget.ImageView;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.andre.projects.moviesmanager.network.response.FilmResponse;
+import com.andre.projects.moviesmanager.main_activity.utils.Movie;
+import com.andre.projects.moviesmanager.R;
+import com.squareup.picasso.Picasso;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapter.ViewHolder> {
 
-    private List<FilmResponse> mData;
+    private List<Movie> mData;
     private LayoutInflater mInflater;
-    private ItemClickListener mClickListener;
+    private static ItemClickListener mClickListener;
 
-    RecyclerViewAdapter(Context context, List<FilmResponse> data){
-        this.mInflater = LayoutInflater.from(context);
-        this.mData = data;
+    public RecyclerViewAdapter() {
+        this.mData = new ArrayList<>();
     }
 
     @NonNull
     @Override
     public RecyclerViewAdapter.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+        mInflater = LayoutInflater.from(parent.getContext());
         View view = mInflater.inflate(R.layout.recycler_view_content, parent, false);
         return new ViewHolder(view);
     }
 
     @Override
     public void onBindViewHolder(@NonNull RecyclerViewAdapter.ViewHolder holder, int position) {
-        //holder.mAnimeImageButton.setText(mData[position]);
-        holder.mNameTextView.setText(mData.get(position).getTitle());
+        holder.bind(mData.get(position));
     }
 
     @Override
@@ -43,14 +43,12 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
         return mData.size();
     }
 
-    public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
+    public static class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
 
-        ImageButton mAnimeImageButton;
-        TextView mNameTextView;
+        ImageView mAnimeImageButton;
 
-        ViewHolder(View v){
+        public ViewHolder(View v){
             super(v);
-            mNameTextView = v.findViewById(R.id.animeName);
             mAnimeImageButton = v.findViewById(R.id.animeImage);
             mAnimeImageButton.setOnClickListener(this);
         }
@@ -59,14 +57,24 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
         public void onClick(View v) {
             if (mClickListener != null) mClickListener.onItemClick(v, getAdapterPosition());
         }
+
+        public void bind(Movie movie){
+            Picasso.with(mAnimeImageButton.getContext()).load("https://image.tmdb.org/t/p/w500"+movie.getPosterPath()).into(mAnimeImageButton);
+        }
+
     }
 
-    void setClickListener(ItemClickListener itemClickListener) {
+    public void setClickListener(ItemClickListener itemClickListener) {
         this.mClickListener = itemClickListener;
     }
 
     public interface ItemClickListener {
         void onItemClick(View view, int position);
+    }
+
+    public void setMovies (List<Movie> movies){
+        this.mData = movies;
+        notifyDataSetChanged();
     }
 
 }

@@ -11,26 +11,14 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.AnimeManager">
-        <activity android:name="com.andre.projects.moviesmanager.SettingsActivity"></activity>
-        <activity android:name="com.andre.projects.moviesmanager.MainActivity">
+        <activity android:name=".detail_activity.MovieDetailsActivity"></activity>
+        <activity android:name=".SettingsActivity" />
+        <activity android:name=".main_activity.MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
-
-            <intent-filter>
-                <action android:name="android.intent.action.VIEW"/>
-
-                <category android:name="android.intent.category.DEFAULT"/>
-                <category android:name="android.intent.category.BROWSABLE"/>
-
-                <data
-                    android:host="callback"
-                    android:scheme="animemanager"/>
-
-            </intent-filter>
         </activity>
     </application>
-
 </manifest>
