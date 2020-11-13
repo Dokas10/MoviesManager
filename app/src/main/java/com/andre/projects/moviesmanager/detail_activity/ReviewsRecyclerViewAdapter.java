@@ -41,7 +41,7 @@ public class ReviewsRecyclerViewAdapter extends RecyclerView.Adapter<ReviewsRecy
         return mDataReview.size();
     }
 
-    public static class ViewHolder extends RecyclerView.ViewHolder{
+    public static class ViewHolder extends RecyclerView.ViewHolder {
 
         TextView author;
         TextView content;
@@ -52,14 +52,14 @@ public class ReviewsRecyclerViewAdapter extends RecyclerView.Adapter<ReviewsRecy
             content = (TextView) itemView.findViewById(R.id.review_body);
         }
 
-        public void bind (Review review){
+        public void bind(Review review) {
             author.setText(review.getAuthor());
-            content.setText(review.getContent()+"\n\n");
+            content.setText(review.getContent() + "\n\n");
         }
 
     }
 
-    public void setReviews (List<Review> reviews){
+    public void setReviews(List<Review> reviews) {
         this.mDataReview = reviews;
         notifyDataSetChanged();
     }

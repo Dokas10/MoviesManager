@@ -8,23 +8,29 @@ import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.Intent;
+import android.database.Cursor;
+import android.database.sqlite.SQLiteDatabase;
+import android.database.sqlite.SQLiteOpenHelper;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.SearchView;
 import android.widget.Toast;
 
 import com.andre.projects.moviesmanager.BuildConfig;
+import com.andre.projects.moviesmanager.database.MovieContract;
+import com.andre.projects.moviesmanager.database.MovieDBHelper;
 import com.andre.projects.moviesmanager.main_activity.utils.Movie;
 import com.andre.projects.moviesmanager.detail_activity.MovieDetailsActivity;
 import com.andre.projects.moviesmanager.main_activity.utils.MovieMapper;
 import com.andre.projects.moviesmanager.R;
-import com.andre.projects.moviesmanager.SettingsActivity;
-import com.andre.projects.moviesmanager.network.FilmApiService;
+import com.andre.projects.moviesmanager.network.MovieApiService;
 import com.andre.projects.moviesmanager.main_activity.network.response.FilmResult;
 import com.google.android.material.navigation.NavigationView;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import retrofit2.Call;
@@ -38,14 +44,18 @@ public class MainActivity extends AppCompatActivity implements RecyclerViewAdapt
     private DrawerLayout drawer;
     private ActionBarDrawerToggle toggle;
     public List<Movie> mData;
+    private SQLiteOpenHelper mOpenHelper;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        mOpenHelper = new MovieDBHelper(this);
+        mData = new ArrayList<>();
+
         configureAdapter();
-        obtainMoviesByTopRated();
+        obtainMoviesByPopularity();
 
         drawer = findViewById(R.id.draw_lay);
         toggle = new ActionBarDrawerToggle(this, drawer,R.string.open_nav,R.string.close_nav);
@@ -65,12 +75,13 @@ public class MainActivity extends AppCompatActivity implements RecyclerViewAdapt
                     configureAdapter();
                     obtainMoviesByPopularity();
                 }else{
-
+                    configureAdapter();
+                    mData = obtainMoviesByFavourite();
+                    adapter.setMovies(mData);
                 }
                 return true;
             }
         });
-
     }
 
     private void configureAdapter(){
@@ -83,7 +94,7 @@ public class MainActivity extends AppCompatActivity implements RecyclerViewAdapt
     }
 
     private void obtainMoviesByTopRated(){
-        FilmApiService.getInstance().obtainMoviesTop(BuildConfig.MovieDBKey).enqueue(new Callback<FilmResult>() {
+        MovieApiService.getInstance().obtainMoviesTop(BuildConfig.MovieDBKey).enqueue(new Callback<FilmResult>() {
             @Override
             public void onResponse(Call<FilmResult> call, Response<FilmResult> response) {
                 if (response.isSuccessful()){
@@ -102,7 +113,7 @@ public class MainActivity extends AppCompatActivity implements RecyclerViewAdapt
     }
 
     private void obtainMoviesByPopularity(){
-        FilmApiService.getInstance().obtainMoviesPopular(BuildConfig.MovieDBKey).enqueue(new Callback<FilmResult>() {
+        MovieApiService.getInstance().obtainMoviesPopular(BuildConfig.MovieDBKey).enqueue(new Callback<FilmResult>() {
             @Override
             public void onResponse(Call<FilmResult> call, Response<FilmResult> response) {
                 if (response.isSuccessful()){
@@ -119,6 +130,55 @@ public class MainActivity extends AppCompatActivity implements RecyclerViewAdapt
             }
         });
 
+    }
+
+    private List<Movie> obtainMoviesByFavourite(){
+
+        List<Movie> favorites = new ArrayList<>();
+
+        SQLiteDatabase db = mOpenHelper.getReadableDatabase();
+
+        Cursor cursor = db.query(MovieContract.MovieEntry.TABLE_NAME,
+                null,
+                null,
+                null,
+                null,
+                null,
+                null);
+
+        while(cursor.moveToNext()){
+            Movie movie = new Movie(cursor.getString(1),
+                    cursor.getString(2),
+                    cursor.getString(3),
+                    cursor.getString(4),
+                    cursor.getString(5),
+                    cursor.getString(0));
+
+            favorites.add(movie);
+
+        }
+
+        return favorites;
+
+    }
+
+    private void obtainMovieBySearch(String search){
+        MovieApiService.getInstance().obtainMoviesBySearch(search, BuildConfig.MovieDBKey).enqueue(new Callback<FilmResult>() {
+            @Override
+            public void onResponse(Call<FilmResult> call, Response<FilmResult> response) {
+                if(response.isSuccessful()) {
+                    mData = MovieMapper.responseToDomain(response.body().getResultadoFilmes());
+                    adapter.setMovies(mData);
+                }else{
+                    showError();
+                }
+            }
+
+            @Override
+            public void onFailure(Call<FilmResult> call, Throwable t) {
+                showError();
+            }
+        });
     }
 
     public void showError(){
@@ -141,19 +201,31 @@ public class MainActivity extends AppCompatActivity implements RecyclerViewAdapt
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater inflater = getMenuInflater();
         inflater.inflate(R.menu.main_activity_menu, menu);
+
+        MenuItem menuItem = menu.findItem(R.id.action_search);
+        SearchView searchView = (SearchView) menuItem.getActionView();
+        searchView.setQueryHint("Search...");
+        searchView.setIconifiedByDefault(false);
+
+        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(String query) {
+                configureAdapter();
+                obtainMovieBySearch(query);
+                return true;
+            }
+
+            @Override
+            public boolean onQueryTextChange(String newText) {
+                return false;
+            }
+        });
+
         return true;
     }
 
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
-
-        int id = item.getItemId();
-
-        if(id == R.id.action_settings){
-            Intent intent = new Intent(this, SettingsActivity.class);
-            startActivity(intent);
-        }
-
         return toggle.onOptionsItemSelected(item) || super.onOptionsItemSelected(item);
     }
 }

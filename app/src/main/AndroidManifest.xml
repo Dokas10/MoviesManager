@@ -11,14 +11,19 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.AnimeManager">
-        <activity android:name=".detail_activity.MovieDetailsActivity"></activity>
-        <activity android:name=".SettingsActivity" />
         <activity android:name=".main_activity.MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
+        </activity>
+        <activity
+            android:name=".detail_activity.MovieDetailsActivity"
+            android:parentActivityName="com.andre.projects.moviesmanager.main_activity.MainActivity">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".main_activity.MainActivity"/>
         </activity>
     </application>
 </manifest>

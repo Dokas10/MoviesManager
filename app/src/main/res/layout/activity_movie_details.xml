@@ -72,6 +72,7 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="250dp"
+            android:id="@+id/lay_reviews"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/reviews">
@@ -79,8 +80,32 @@
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/rv_reviews"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:orientation="vertical" />
+                android:layout_height="match_parent"/>
+
+        </LinearLayout>
+
+        <TextView
+            android:id="@+id/videos"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="20dp"
+            android:layout_marginLeft="20dp"
+            android:layout_marginTop="30dp"
+            android:text="Videos"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/lay_reviews" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="250dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/videos">
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/rv_videos"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"/>
 
         </LinearLayout>
 

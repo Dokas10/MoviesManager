@@ -3,11 +3,11 @@ package com.andre.projects.moviesmanager.network;
 import retrofit2.Retrofit;
 import retrofit2.converter.moshi.MoshiConverterFactory;
 
-public class FilmApiService {
+public class MovieApiService {
 
-    private static FilmInterface INSTANCE;
+    private static MovieInterface INSTANCE;
 
-    public static FilmInterface getInstance(){
+    public static MovieInterface getInstance(){
 
         if(INSTANCE == null) {
 
@@ -16,7 +16,7 @@ public class FilmApiService {
                     .addConverterFactory(MoshiConverterFactory.create())
                     .build();
 
-            INSTANCE = retrofit.create(FilmInterface.class);
+            INSTANCE = retrofit.create(MovieInterface.class);
 
         }
 
