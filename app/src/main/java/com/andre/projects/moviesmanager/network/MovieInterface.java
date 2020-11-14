@@ -18,10 +18,10 @@ public interface MovieInterface {
     Call<VideoResult> obtainVideos(@Path("movie_id") String id, @Query("api_key") String key);
 
     @GET("movie/popular")
-    Call<FilmResult> obtainMoviesPopular(@Query("api_key") String key);
+    Call<FilmResult> obtainMoviesPopular(@Query("page") int page, @Query("api_key") String key);
 
     @GET("movie/top_rated")
-    Call<FilmResult> obtainMoviesTop(@Query("api_key") String key);
+    Call<FilmResult> obtainMoviesTop(@Query("page") int page, @Query("api_key") String key);
 
     @GET("search/movie")
     Call<FilmResult> obtainMoviesBySearch(@Query("query") String search, @Query("api_key") String key);

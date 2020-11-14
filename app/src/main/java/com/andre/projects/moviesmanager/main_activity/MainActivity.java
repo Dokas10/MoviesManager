@@ -1,6 +1,7 @@
 package com.andre.projects.moviesmanager.main_activity;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.drawerlayout.widget.DrawerLayout;
@@ -45,17 +46,23 @@ public class MainActivity extends AppCompatActivity implements RecyclerViewAdapt
     private ActionBarDrawerToggle toggle;
     public List<Movie> mData;
     private SQLiteOpenHelper mOpenHelper;
+    int i=1;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        ActionBar ab = getSupportActionBar();
+        ab.setHomeAsUpIndicator(R.drawable.ic_baseline_menu_24);
+        ab.setDisplayHomeAsUpEnabled(true);
+
         mOpenHelper = new MovieDBHelper(this);
         mData = new ArrayList<>();
 
         configureAdapter();
-        obtainMoviesByPopularity();
+        obtainMoviesByPopularity(i);
+        rvScrollListenerPopularity();
 
         drawer = findViewById(R.id.draw_lay);
         toggle = new ActionBarDrawerToggle(this, drawer,R.string.open_nav,R.string.close_nav);
@@ -70,16 +77,68 @@ public class MainActivity extends AppCompatActivity implements RecyclerViewAdapt
                 int id = item.getItemId();
                 if(id == R.id.top_rated){
                     configureAdapter();
-                    obtainMoviesByTopRated();
+                    obtainMoviesByTopRated(1);
+                    rvScrollListenerTop();
                 } else if(id == R.id.popular){
                     configureAdapter();
-                    obtainMoviesByPopularity();
+                    obtainMoviesByPopularity(1);
+                    rvScrollListenerPopularity();
                 }else{
                     configureAdapter();
                     mData = obtainMoviesByFavourite();
                     adapter.setMovies(mData);
                 }
                 return true;
+            }
+        });
+    }
+
+    private void rvScrollListenerPopularity(){
+        i=1;
+        rv.addOnScrollListener(new RecyclerView.OnScrollListener() {
+            @Override
+            public void onScrollStateChanged(@NonNull RecyclerView recyclerView, int newState) {
+                super.onScrollStateChanged(recyclerView, newState);
+                if(!rv.canScrollVertically(1) && newState==RecyclerView.SCROLL_STATE_IDLE) {
+                    if(i == 1000)
+                        return;
+                    else
+                        i++;
+                    rv.scrollToPosition(0);
+                    obtainMoviesByPopularity(i);
+                } else if(!rv.canScrollVertically(-1) && newState==RecyclerView.SCROLL_STATE_IDLE) {
+                    if(i == 1)
+                        return;
+                    else
+                        i--;
+                    rv.scrollToPosition(adapter.getItemCount()-1);
+                    obtainMoviesByPopularity(i);
+                }
+            }
+        });
+    }
+
+    private void rvScrollListenerTop(){
+        i=1;
+        rv.addOnScrollListener(new RecyclerView.OnScrollListener() {
+            @Override
+            public void onScrollStateChanged(@NonNull RecyclerView recyclerView, int newState) {
+                super.onScrollStateChanged(recyclerView, newState);
+                if(!rv.canScrollVertically(1) && newState==RecyclerView.SCROLL_STATE_IDLE) {
+                    if(i == 1000)
+                        return;
+                    else
+                        i++;
+                    rv.scrollToPosition(0);
+                    obtainMoviesByTopRated(i);
+                } else if(!rv.canScrollVertically(-1) && newState==RecyclerView.SCROLL_STATE_IDLE) {
+                    if(i == 1)
+                        return;
+                    else
+                        i--;
+                    rv.scrollToPosition(adapter.getItemCount()-1);
+                    obtainMoviesByTopRated(i);
+                }
             }
         });
     }
@@ -93,8 +152,8 @@ public class MainActivity extends AppCompatActivity implements RecyclerViewAdapt
         rv.setAdapter(adapter);
     }
 
-    private void obtainMoviesByTopRated(){
-        MovieApiService.getInstance().obtainMoviesTop(BuildConfig.MovieDBKey).enqueue(new Callback<FilmResult>() {
+    private void obtainMoviesByTopRated(int i){
+        MovieApiService.getInstance().obtainMoviesTop(i, BuildConfig.MovieDBKey).enqueue(new Callback<FilmResult>() {
             @Override
             public void onResponse(Call<FilmResult> call, Response<FilmResult> response) {
                 if (response.isSuccessful()){
@@ -112,8 +171,8 @@ public class MainActivity extends AppCompatActivity implements RecyclerViewAdapt
         });
     }
 
-    private void obtainMoviesByPopularity(){
-        MovieApiService.getInstance().obtainMoviesPopular(BuildConfig.MovieDBKey).enqueue(new Callback<FilmResult>() {
+    private void obtainMoviesByPopularity(int i){
+        MovieApiService.getInstance().obtainMoviesPopular(i, BuildConfig.MovieDBKey).enqueue(new Callback<FilmResult>() {
             @Override
             public void onResponse(Call<FilmResult> call, Response<FilmResult> response) {
                 if (response.isSuccessful()){
@@ -129,7 +188,6 @@ public class MainActivity extends AppCompatActivity implements RecyclerViewAdapt
                 showError();
             }
         });
-
     }
 
     private List<Movie> obtainMoviesByFavourite(){

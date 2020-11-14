@@ -10,10 +10,14 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.andre.projects.moviesmanager.main_activity.utils.Movie;
 import com.andre.projects.moviesmanager.R;
+import com.google.android.material.shape.RoundedCornerTreatment;
 import com.squareup.picasso.Picasso;
+import com.squareup.picasso.Transformation;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import jp.wasabeef.picasso.transformations.RoundedCornersTransformation;
 
 public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapter.ViewHolder> {
 
@@ -59,7 +63,9 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
         }
 
         public void bind(Movie movie){
-            Picasso.with(mAnimeImageButton.getContext()).load("https://image.tmdb.org/t/p/w500"+movie.getPosterPath()).into(mAnimeImageButton);
+
+            Picasso.with(mAnimeImageButton.getContext()).load("https://image.tmdb.org/t/p/w500"+movie.getPosterPath()).transform(new RoundedCornersTransformation(10,10)).into(mAnimeImageButton);
+
         }
 
     }
