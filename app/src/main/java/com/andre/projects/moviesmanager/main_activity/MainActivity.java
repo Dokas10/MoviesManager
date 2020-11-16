@@ -5,10 +5,12 @@ import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.drawerlayout.widget.DrawerLayout;
+import androidx.lifecycle.Lifecycle;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.Intent;
+import android.content.res.Configuration;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
@@ -47,6 +49,9 @@ public class MainActivity extends AppCompatActivity implements RecyclerViewAdapt
     public List<Movie> mData;
     private SQLiteOpenHelper mOpenHelper;
     int i=1;
+    private static boolean IS_FAVORITE_SELECTED = false;
+
+    private static int numberGridColumns;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -60,7 +65,12 @@ public class MainActivity extends AppCompatActivity implements RecyclerViewAdapt
         mOpenHelper = new MovieDBHelper(this);
         mData = new ArrayList<>();
 
-        configureAdapter();
+        if(getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE)
+            numberGridColumns = 3;
+        else
+            numberGridColumns = 2;
+
+        configureAdapter(numberGridColumns);
         obtainMoviesByPopularity(i);
         rvScrollListenerPopularity();
 
@@ -75,16 +85,20 @@ public class MainActivity extends AppCompatActivity implements RecyclerViewAdapt
             @Override
             public boolean onNavigationItemSelected(@NonNull MenuItem item) {
                 int id = item.getItemId();
+
                 if(id == R.id.top_rated){
-                    configureAdapter();
+                    IS_FAVORITE_SELECTED = false;
+                    configureAdapter(numberGridColumns);
                     obtainMoviesByTopRated(1);
                     rvScrollListenerTop();
                 } else if(id == R.id.popular){
-                    configureAdapter();
+                    IS_FAVORITE_SELECTED = false;
+                    configureAdapter(numberGridColumns);
                     obtainMoviesByPopularity(1);
                     rvScrollListenerPopularity();
                 }else{
-                    configureAdapter();
+                    IS_FAVORITE_SELECTED = true;
+                    configureAdapter(numberGridColumns);
                     mData = obtainMoviesByFavourite();
                     adapter.setMovies(mData);
                 }
@@ -93,20 +107,22 @@ public class MainActivity extends AppCompatActivity implements RecyclerViewAdapt
         });
     }
 
+
+
     private void rvScrollListenerPopularity(){
         i=1;
         rv.addOnScrollListener(new RecyclerView.OnScrollListener() {
             @Override
             public void onScrollStateChanged(@NonNull RecyclerView recyclerView, int newState) {
                 super.onScrollStateChanged(recyclerView, newState);
-                if(!rv.canScrollVertically(1) && newState==RecyclerView.SCROLL_STATE_IDLE) {
+                if(!rv.canScrollVertically(1) && newState==RecyclerView.SCROLL_STATE_IDLE && !IS_FAVORITE_SELECTED) {
                     if(i == 1000)
                         return;
                     else
                         i++;
                     rv.scrollToPosition(0);
                     obtainMoviesByPopularity(i);
-                } else if(!rv.canScrollVertically(-1) && newState==RecyclerView.SCROLL_STATE_IDLE) {
+                } else if(!rv.canScrollVertically(-1) && newState==RecyclerView.SCROLL_STATE_IDLE && !IS_FAVORITE_SELECTED) {
                     if(i == 1)
                         return;
                     else
@@ -124,14 +140,14 @@ public class MainActivity extends AppCompatActivity implements RecyclerViewAdapt
             @Override
             public void onScrollStateChanged(@NonNull RecyclerView recyclerView, int newState) {
                 super.onScrollStateChanged(recyclerView, newState);
-                if(!rv.canScrollVertically(1) && newState==RecyclerView.SCROLL_STATE_IDLE) {
+                if(!rv.canScrollVertically(1) && newState==RecyclerView.SCROLL_STATE_IDLE && !IS_FAVORITE_SELECTED) {
                     if(i == 1000)
                         return;
                     else
                         i++;
                     rv.scrollToPosition(0);
                     obtainMoviesByTopRated(i);
-                } else if(!rv.canScrollVertically(-1) && newState==RecyclerView.SCROLL_STATE_IDLE) {
+                } else if(!rv.canScrollVertically(-1) && newState==RecyclerView.SCROLL_STATE_IDLE && !IS_FAVORITE_SELECTED) {
                     if(i == 1)
                         return;
                     else
@@ -143,9 +159,9 @@ public class MainActivity extends AppCompatActivity implements RecyclerViewAdapt
         });
     }
 
-    private void configureAdapter(){
+    private void configureAdapter(int columnsGrid){
         rv = findViewById(R.id.rv_movie);
-        rv.setLayoutManager(new GridLayoutManager(MainActivity.this, 2));
+        rv.setLayoutManager(new GridLayoutManager(MainActivity.this, columnsGrid));
 
         adapter = new RecyclerViewAdapter();
         adapter.setClickListener(MainActivity.this);
@@ -268,7 +284,7 @@ public class MainActivity extends AppCompatActivity implements RecyclerViewAdapt
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
             public boolean onQueryTextSubmit(String query) {
-                configureAdapter();
+                configureAdapter(numberGridColumns);
                 obtainMovieBySearch(query);
                 return true;
             }

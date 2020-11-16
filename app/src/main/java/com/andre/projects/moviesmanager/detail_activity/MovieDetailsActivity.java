@@ -2,6 +2,8 @@ package com.andre.projects.moviesmanager.detail_activity;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -24,12 +26,16 @@ import com.andre.projects.moviesmanager.BuildConfig;
 import com.andre.projects.moviesmanager.R;
 import com.andre.projects.moviesmanager.database.MovieContract;
 import com.andre.projects.moviesmanager.database.MovieDBHelper;
+import com.andre.projects.moviesmanager.detail_activity.fragments.DetailsFragment;
+import com.andre.projects.moviesmanager.detail_activity.fragments.ReviewsFragment;
+import com.andre.projects.moviesmanager.detail_activity.fragments.TrailersFragment;
 import com.andre.projects.moviesmanager.detail_activity.network_response.ReviewResult;
 import com.andre.projects.moviesmanager.detail_activity.network_response.VideoResult;
 import com.andre.projects.moviesmanager.detail_activity.utils.Mapper;
 import com.andre.projects.moviesmanager.detail_activity.utils.Video;
 import com.andre.projects.moviesmanager.main_activity.MainActivity;
 import com.andre.projects.moviesmanager.network.MovieApiService;
+import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.squareup.picasso.Picasso;
 
 import java.util.List;
@@ -38,23 +44,13 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class MovieDetailsActivity extends AppCompatActivity implements VideosRecyclerViewAdapter.ItemClickListener {
+public class MovieDetailsActivity extends AppCompatActivity {
 
-    ImageView poster;
-    TextView title;
-    TextView resume;
-    TextView ratings;
-    TextView releaseDate;
-
-    private List<Video> dataVideos;
-
-    private RecyclerView rv_reviews;
-    private RecyclerView rv_videos;
-    private ReviewsRecyclerViewAdapter adapterReviews;
-    private VideosRecyclerViewAdapter adapterVideos;
     private Intent intent;
 
     private MovieDBHelper mOpenHelper;
+
+    BottomNavigationView nav_view;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -63,92 +59,40 @@ public class MovieDetailsActivity extends AppCompatActivity implements VideosRec
 
         mOpenHelper = new MovieDBHelper(this);
 
-        poster = (ImageView) findViewById(R.id.poster);
-        title = (TextView) findViewById(R.id.movie_name);
-        resume = (TextView) findViewById(R.id.resume_text);
-        ratings = (TextView) findViewById(R.id.rating);
-        releaseDate = (TextView) findViewById(R.id.releaseDate);
+        nav_view = (BottomNavigationView) findViewById(R.id.nav_menu);
+        nav_view.setOnNavigationItemSelectedListener(listener);
 
         intent = getIntent();
 
-        Picasso.with(this).load("https://image.tmdb.org/t/p/w500" + intent.getStringExtra("Thumbnail")).into(poster);
-        title.setText(intent.getStringExtra("Title"));
-        resume.setText(intent.getStringExtra("Overview"));
-        ratings.setText("User Rating: " + intent.getStringExtra("Rating"));
-        releaseDate.setText("Release Date: " + intent.getStringExtra("Date"));
-
-        configureAdapterReviews();
-        obtainReviews(intent.getStringExtra("Id"));
-
-        configureAdapterVideos();
-        obtainVideos(intent.getStringExtra("Id"));
+        getSupportFragmentManager().beginTransaction().replace(R.id.cons_layout_details, new DetailsFragment()).commit();
 
     }
 
-    private void configureAdapterReviews() {
-        rv_reviews = findViewById(R.id.rv_reviews);
-        rv_reviews.setLayoutManager(new LinearLayoutManager(this));
+    private BottomNavigationView.OnNavigationItemSelectedListener listener = new BottomNavigationView.OnNavigationItemSelectedListener() {
+        @Override
+        public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+            Fragment selectedFragment = null;
 
-        adapterReviews = new ReviewsRecyclerViewAdapter();
-        rv_reviews.setAdapter(adapterReviews);
-    }
+            switch(item.getItemId()){
 
-    private void configureAdapterVideos() {
-        rv_videos = findViewById(R.id.rv_videos);
-        rv_videos.setLayoutManager(new LinearLayoutManager(this));
+                case R.id.nav_details:
+                    selectedFragment = new DetailsFragment();
+                    break;
 
-        adapterVideos = new VideosRecyclerViewAdapter();
-        adapterVideos.setClickListener(MovieDetailsActivity.this);
-        rv_videos.setAdapter(adapterVideos);
-    }
+                case R.id.nav_reviews:
+                    selectedFragment = new ReviewsFragment();
+                    break;
 
-    private void obtainReviews(String id) {
-        MovieApiService.getInstance().obtainReviews(id, BuildConfig.MovieDBKey).enqueue(new Callback<ReviewResult>() {
-            @Override
-            public void onResponse(Call<ReviewResult> call, Response<ReviewResult> response) {
-                if (response.isSuccessful()) {
-                    adapterReviews.setReviews(Mapper.responseToReview(response.body().getResultReviews()));
-                } else {
-                    showError();
-                }
+                case R.id.nav_trailers:
+                    selectedFragment = new TrailersFragment();
+                    break;
+
             }
+            getSupportFragmentManager().beginTransaction().replace(R.id.cons_layout_details, selectedFragment).commit();
 
-            @Override
-            public void onFailure(Call<ReviewResult> call, Throwable t) {
-                showError();
-            }
-        });
-    }
-
-    private void obtainVideos(String id) {
-
-        MovieApiService.getInstance().obtainVideos(id, BuildConfig.MovieDBKey).enqueue(new Callback<VideoResult>() {
-            @Override
-            public void onResponse(Call<VideoResult> call, Response<VideoResult> response) {
-                if(response.isSuccessful()){
-                    dataVideos = Mapper.responseToVideo(response.body().getResultVideos());
-                    adapterVideos.setVideo(dataVideos);
-                }else{
-                    showError();
-                }
-            }
-
-            @Override
-            public void onFailure(Call<VideoResult> call, Throwable t) {
-                showError();
-            }
-        });
-    }
-
-    @Override
-    public void onItemClick(View view, int position) {
-        Intent intent = new Intent (Intent.ACTION_VIEW, Uri.parse("vnd.youtube://" + dataVideos.get(position).getKey()));
-        startActivity(intent);
-    }
-
-    public void showError() {
-        Toast.makeText(this, "Error occurred, please try again later.", Toast.LENGTH_SHORT).show();
-    }
+            return true;
+        }
+    };
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {

@@ -48,8 +48,8 @@ public class ReviewsRecyclerViewAdapter extends RecyclerView.Adapter<ReviewsRecy
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
-            author = (TextView) itemView.findViewById(R.id.user_name);
-            content = (TextView) itemView.findViewById(R.id.review_body);
+            author = (TextView) itemView.findViewById(R.id.review_name);
+            content = (TextView) itemView.findViewById(R.id.review_content);
         }
 
         public void bind(Review review) {
