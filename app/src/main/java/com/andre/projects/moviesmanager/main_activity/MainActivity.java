@@ -20,6 +20,7 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.SearchView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -53,6 +54,7 @@ public class MainActivity extends AppCompatActivity implements RecyclerViewAdapt
     private TextView error;
     int i=1;
     private static boolean IS_FAVORITE_SELECTED = false;
+    private RelativeLayout layout;
 
     private static int numberGridColumns;
 
@@ -69,6 +71,9 @@ public class MainActivity extends AppCompatActivity implements RecyclerViewAdapt
         mData = new ArrayList<>();
 
         error = (TextView) findViewById(R.id.error_tv);
+        layout = (RelativeLayout) findViewById(R.id.lay_mov);
+        error.setVisibility(View.INVISIBLE);
+        layout.setVisibility(View.VISIBLE);
 
         if(getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE)
             numberGridColumns = 3;
@@ -261,8 +266,9 @@ public class MainActivity extends AppCompatActivity implements RecyclerViewAdapt
     }
 
     public void showError(){
-        Toast.makeText(this, "Error occurred, please try again later.", Toast.LENGTH_SHORT).show();
         error.setVisibility(View.VISIBLE);
+        layout.setVisibility(View.INVISIBLE);
+
     }
 
     @Override
@@ -306,6 +312,16 @@ public class MainActivity extends AppCompatActivity implements RecyclerViewAdapt
 
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+
+        int id = item.getItemId();
+
+        if(id == R.id.action_refresh){
+            finish();
+            overridePendingTransition(0,0);
+            startActivity(getIntent());
+            overridePendingTransition(0,0);
+        }
+
         return toggle.onOptionsItemSelected(item) || super.onOptionsItemSelected(item);
     }
 }
