@@ -19,7 +19,9 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.LinearLayout;
 import android.widget.SearchView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.andre.projects.moviesmanager.BuildConfig;
@@ -48,6 +50,7 @@ public class MainActivity extends AppCompatActivity implements RecyclerViewAdapt
     private ActionBarDrawerToggle toggle;
     public List<Movie> mData;
     private SQLiteOpenHelper mOpenHelper;
+    private TextView error;
     int i=1;
     private static boolean IS_FAVORITE_SELECTED = false;
 
@@ -64,6 +67,8 @@ public class MainActivity extends AppCompatActivity implements RecyclerViewAdapt
 
         mOpenHelper = new MovieDBHelper(this);
         mData = new ArrayList<>();
+
+        error = (TextView) findViewById(R.id.error_tv);
 
         if(getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE)
             numberGridColumns = 3;
@@ -257,6 +262,7 @@ public class MainActivity extends AppCompatActivity implements RecyclerViewAdapt
 
     public void showError(){
         Toast.makeText(this, "Error occurred, please try again later.", Toast.LENGTH_SHORT).show();
+        error.setVisibility(View.VISIBLE);
     }
 
     @Override

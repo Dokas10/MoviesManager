@@ -9,6 +9,7 @@
     android:id="@+id/draw_lay">
 
     <RelativeLayout
+        android:id="@+id/lay_mov"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         tools:context=".main_activity.MainActivity">
@@ -20,6 +21,15 @@
 
 
     </RelativeLayout>
+
+    <TextView
+        android:id="@+id/error_tv"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:text="Error while communicating with the servers. Check your internet connection and refresh the page."
+        android:gravity="center"
+        android:textSize="16dp"
+        android:visibility="invisible"/>
 
     <com.google.android.material.navigation.NavigationView
         android:layout_width="wrap_content"
