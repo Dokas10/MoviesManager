@@ -8,6 +8,7 @@
     android:layout_height="match_parent"
     android:id="@+id/draw_lay">
 
+    <!--Layout with recycler view for movie presentation-->
     <RelativeLayout
         android:id="@+id/lay_mov"
         android:layout_width="match_parent"
@@ -22,6 +23,7 @@
 
     </RelativeLayout>
 
+    <!--Error message in case of no internet connection-->
     <TextView
         android:id="@+id/error_tv"
         android:layout_width="match_parent"
@@ -31,6 +33,7 @@
         android:textSize="16sp"
         android:visibility="invisible"/>
 
+    <!--NavigationView for type of sorting movies-->
     <com.google.android.material.navigation.NavigationView
         android:layout_width="wrap_content"
         android:layout_height="match_parent"

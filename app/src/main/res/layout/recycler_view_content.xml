@@ -5,6 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content">
 
+    <!--Image where movie image will be set-->
     <ImageView
         android:id="@+id/animeImage"
         android:layout_width="match_parent"

@@ -6,6 +6,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     tools:context=".detail_activity.fragments.DetailsFragment">
 
+    <!--Movie image-->
     <ImageView
         android:id="@+id/poster"
         android:layout_width="164dp"
@@ -17,6 +18,7 @@
         app:layout_constraintTop_toTopOf="parent"
         tools:srcCompat="@tools:sample/avatars" />
 
+    <!--Movie name-->
     <TextView
         android:id="@+id/movie_name"
         android:layout_width="0dp"
@@ -32,6 +34,7 @@
         app:layout_constraintStart_toEndOf="@+id/poster"
         app:layout_constraintTop_toTopOf="parent" />
 
+    <!--Movie overview label-->
     <TextView
         android:id="@+id/resumeLabel"
         android:layout_width="wrap_content"
@@ -44,6 +47,7 @@
         android:text="@string/overview"
         app:layout_constraintTop_toBottomOf="@+id/poster" />
 
+    <!--Movie overview text-->
     <TextView
         android:id="@+id/resume_text"
         android:layout_width="match_parent"
@@ -56,6 +60,7 @@
         android:textSize="16sp"
         app:layout_constraintTop_toBottomOf="@+id/resumeLabel"/>
 
+    <!--Movie rating-->
     <TextView
         android:id="@+id/rating"
         android:layout_width="0dp"
@@ -71,6 +76,7 @@
         app:layout_constraintStart_toEndOf="@+id/poster"
         app:layout_constraintTop_toBottomOf="@+id/movie_name" />
 
+    <!--Movie release date-->
     <TextView
         android:id="@+id/releaseDate"
         android:layout_width="0dp"
