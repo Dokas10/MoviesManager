@@ -14,10 +14,10 @@ import com.andre.projects.moviesmanager.detail_activity.utils.Review;
 import java.util.ArrayList;
 import java.util.List;
 
+//Class that creates and manages the adapter for the recyclerview that presents all the reviews
 public class ReviewsRecyclerViewAdapter extends RecyclerView.Adapter<ReviewsRecyclerViewAdapter.ViewHolder> {
 
     private List<Review> mDataReview;
-    private LayoutInflater mInflater;
 
     public ReviewsRecyclerViewAdapter() {
         this.mDataReview = new ArrayList<>();
@@ -26,6 +26,7 @@ public class ReviewsRecyclerViewAdapter extends RecyclerView.Adapter<ReviewsRecy
     @NonNull
     @Override
     public ReviewsRecyclerViewAdapter.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+        LayoutInflater mInflater;
         mInflater = LayoutInflater.from(parent.getContext());
         View v = mInflater.inflate(R.layout.review_rv_content, parent, false);
         return new ViewHolder(v);
@@ -54,7 +55,7 @@ public class ReviewsRecyclerViewAdapter extends RecyclerView.Adapter<ReviewsRecy
 
         public void bind(Review review) {
             author.setText(review.getAuthor());
-            content.setText(review.getContent() + "\n\n");
+            content.setText(review.getContent());
         }
 
     }

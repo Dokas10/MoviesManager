@@ -9,6 +9,7 @@ import retrofit2.http.GET;
 import retrofit2.http.Path;
 import retrofit2.http.Query;
 
+//Class that get all the calls to the api
 public interface MovieInterface {
 
     @GET("movie/{movie_id}/reviews")

@@ -4,6 +4,8 @@ import android.provider.BaseColumns;
 
 public class MovieContract {
 
+    //Database constant creation
+
     public static final class MovieEntry implements BaseColumns{
 
         public static final String TABLE_NAME = "movies";

@@ -2,6 +2,7 @@ package com.andre.projects.moviesmanager.detail_activity.network_response;
 
 import com.squareup.moshi.Json;
 
+//Method that manages review atributtes based on API call
 public class ReviewResponse {
 
     @Json(name = "author")

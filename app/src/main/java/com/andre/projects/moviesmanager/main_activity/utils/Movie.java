@@ -1,13 +1,14 @@
 package com.andre.projects.moviesmanager.main_activity.utils;
 
+//Class tha defines objects called Movie
 public class Movie {
 
-    private String title;
-    private String posterPath;
-    private String resume;
-    private String rating;
-    private String releaseDate;
-    private String id;
+    private final String title;
+    private final String posterPath;
+    private final String resume;
+    private final String rating;
+    private final String releaseDate;
+    private final String id;
 
     public Movie(String title, String posterPath, String resume, String rating, String releaseDate, String id) {
         this.title = title;

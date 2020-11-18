@@ -4,6 +4,7 @@ import com.squareup.moshi.Json;
 
 import java.util.List;
 
+//Class that manages results of the API call for the trailers
 public class VideoResult {
 
     @Json(name="results")

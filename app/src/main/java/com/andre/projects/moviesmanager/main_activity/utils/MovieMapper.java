@@ -7,6 +7,7 @@ import java.util.List;
 
 public class MovieMapper {
 
+    //Method that creates a movie list based on API call
     public static List<Movie> responseToDomain(List<MovieResponse> responseList){
 
         List<Movie> movieList = new ArrayList<>();

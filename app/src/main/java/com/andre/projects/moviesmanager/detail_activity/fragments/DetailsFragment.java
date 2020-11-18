@@ -26,8 +26,10 @@ public class DetailsFragment extends Fragment {
     TextView releaseDate;
 
     public DetailsFragment() {
+        //Empty because is necessary
     }
 
+    //Details fragment inflater and view content set
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 
@@ -44,10 +46,11 @@ public class DetailsFragment extends Fragment {
         Picasso.with(getActivity()).load("https://image.tmdb.org/t/p/w500" + intent.getStringExtra("Thumbnail")).transform(new RoundedCornersTransformation(10,10)).into(poster);
         title.setText(intent.getStringExtra("Title"));
         resume.setText(intent.getStringExtra("Overview"));
-        ratings.setText("User Rating: " + intent.getStringExtra("Rating"));
-        releaseDate.setText("Release Date: " + intent.getStringExtra("Date"));
+        ratings.setText(getString(R.string.setRating, intent.getStringExtra("Rating")));
+        releaseDate.setText(getString(R.string.setDate, intent.getStringExtra("Date")));
 
         return view;
 
     }
+
 }

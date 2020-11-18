@@ -14,10 +14,10 @@ import com.andre.projects.moviesmanager.detail_activity.utils.Video;
 import java.util.ArrayList;
 import java.util.List;
 
+//Class that creates and manages the adapter for the recyclerview that presents all the trailers, also implementing an onClick method for each element
 public class VideosRecyclerViewAdapter extends RecyclerView.Adapter<VideosRecyclerViewAdapter.ViewHolder> {
 
     private List<Video> mDataVideo;
-    private LayoutInflater mInflater;
     private static ItemClickListener mClickListener;
 
     public VideosRecyclerViewAdapter() {
@@ -27,6 +27,7 @@ public class VideosRecyclerViewAdapter extends RecyclerView.Adapter<VideosRecycl
     @NonNull
     @Override
     public VideosRecyclerViewAdapter.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+        LayoutInflater mInflater;
         mInflater = LayoutInflater.from(parent.getContext());
         View v = mInflater.inflate(R.layout.video_rv_content, parent, false);
         return new ViewHolder(v);

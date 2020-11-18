@@ -1,0 +1,42 @@
+
+i
+java:S1104/"SMake adapter a static final constant or non-public and provide accessors if needed.(®ĞÎê
+M
+java:S2696°"6Make the enclosing method "static" or remove this set.(é¤Â‚
+Y
+java:S2696±"6Make the enclosing method "static" or remove this set.(«¦¡’ıÿÿÿÿ8®¹¶Ûİ.
+z
+java:S30086"_Rename this field "IS_FAVORITE_SELECTED" to match the regular expression '^[a-z][a-zA-Z0-9]*$'.(„É¼óûÿÿÿÿ
+Y
+java:S2696´"6Make the enclosing method "static" or remove this set.(ú¦¥ÿşÿÿÿÿ8®¹¶Ûİ.
+C
+java:S1604`"(Make this anonymous inner class a lambda(ìĞ“¼şÿÿÿÿ
+O
+java:S1128"2Remove this unused import 'android.os.Parcelable'.(õÃÀ­8à×Ûİ.
+k
+java:S14500"URemove the "drawer" field and declare it as a local variable in the relevant methods.(ö¬ïå
+Q
+java:S2696S"6Make the enclosing method "static" or remove this set.(œÛÑçøÿÿÿÿ
+V
+java:S14449"4Make this "public static mLayoutManager" field final(êËéõúÿÿÿÿ8Ì…ŸÛİ.
+l
+java:S11042"QMake mData a static final constant or non-public and provide accessors if needed.(ù §»ûÿÿÿÿ
+p
+java:S1104:"NMake rv a static final constant or non-public and provide accessors if needed.(üå‘Äÿÿÿÿÿ8²‘£Ûİ.
+Q
+java:S2696f"6Make the enclosing method "static" or remove this set.(Æ©€¶üÿÿÿÿ
+V	java:S110-"<This class has 9 parents which is greater than 5 authorized.(æºÅõúÿÿÿÿ
+|
+java:S11049"ZMake mLayoutManager a static final constant or non-public and provide accessors if needed.(êËéõúÿÿÿÿ8Ì…ŸÛİ.
+L
+java:S2696Q"6Make the enclosing method "static" or remove this set.(Œ¹ş
+L
+java:S2696p"6Make the enclosing method "static" or remove this set.(áúøá
+Q
+java:S2696k"6Make the enclosing method "static" or remove this set.(Æ©€¶üÿÿÿÿ
+C
+java:S1444/"-Make this "public static adapter" field final(®ĞÎê
+[
+java:S1128"9Remove this unused import 'android.os.PersistableBundle'.(Ñƒ¨’øÿÿÿÿ8µŠ½Ûİ.
+J
+java:S1444:"(Make this "public static rv" field final(üå‘Äÿÿÿÿÿ8²‘£Ûİ.

@@ -28,7 +28,7 @@
         android:layout_height="match_parent"
         android:text="Error while communicating with the servers. Check your internet connection and refresh the page."
         android:gravity="center"
-        android:textSize="16dp"
+        android:textSize="16sp"
         android:visibility="invisible"/>
 
     <com.google.android.material.navigation.NavigationView

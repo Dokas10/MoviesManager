@@ -4,6 +4,7 @@ import com.squareup.moshi.Json;
 
 import java.util.List;
 
+//Class that manages of the results for the movies
 public class FilmResult {
 
     @Json(name="results")

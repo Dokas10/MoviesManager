@@ -1,9 +1,10 @@
 package com.andre.projects.moviesmanager.detail_activity.utils;
 
+// Class that defines object of type Video
 public class Video {
 
-    private String name;
-    private String key;
+    private final String name;
+    private final String key;
 
     public Video(String name, String key) {
         this.name = name;

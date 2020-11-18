@@ -10,19 +10,18 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.andre.projects.moviesmanager.main_activity.utils.Movie;
 import com.andre.projects.moviesmanager.R;
-import com.google.android.material.shape.RoundedCornerTreatment;
 import com.squareup.picasso.Picasso;
-import com.squareup.picasso.Transformation;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import jp.wasabeef.picasso.transformations.RoundedCornersTransformation;
 
+//Class that creates and manages the adapter for the recyclerview that presents all the movies, also implementing an onClick method for each element
 public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapter.ViewHolder> {
 
     private List<Movie> mData;
-    private LayoutInflater mInflater;
+
     private static ItemClickListener mClickListener;
 
     public RecyclerViewAdapter() {
@@ -32,6 +31,7 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
     @NonNull
     @Override
     public RecyclerViewAdapter.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+        LayoutInflater mInflater;
         mInflater = LayoutInflater.from(parent.getContext());
         View view = mInflater.inflate(R.layout.recycler_view_content, parent, false);
         return new ViewHolder(view);

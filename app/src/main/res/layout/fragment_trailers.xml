@@ -13,12 +13,13 @@
         android:layout_marginStart="20dp"
         android:layout_marginLeft="20dp"
         android:layout_marginTop="20dp"
-        android:text="Trailers"
+        android:text="@string/trailers"
         android:textSize="18sp"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintStart_toStartOf="parent"/>
 
     <LinearLayout
+        android:id="@+id/trail_lay"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_marginTop="20dp"
@@ -33,6 +34,19 @@
             android:layout_height="match_parent"/>
 
     </LinearLayout>
+
+    <TextView
+        android:id="@+id/trailers_error"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:text="@string/error"
+        android:gravity="center"
+        android:textSize="16sp"
+        android:visibility="invisible"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/videos"
+        app:layout_constraintBottom_toBottomOf="parent"/>
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

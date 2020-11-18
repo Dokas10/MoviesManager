@@ -4,6 +4,8 @@ import com.squareup.moshi.Json;
 
 import java.util.List;
 
+
+//Class that manages results of the API call for the reviews
 public class ReviewResult {
 
     @Json(name="results")

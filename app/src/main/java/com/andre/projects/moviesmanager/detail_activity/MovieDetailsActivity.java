@@ -3,46 +3,24 @@ package com.andre.projects.moviesmanager.detail_activity;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentActivity;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.ContentValues;
 import android.content.Intent;
-import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
-import android.net.Uri;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
-import android.view.View;
-import android.widget.ImageView;
-import android.widget.TextView;
 import android.widget.Toast;
 
-import com.andre.projects.moviesmanager.BuildConfig;
 import com.andre.projects.moviesmanager.R;
 import com.andre.projects.moviesmanager.database.MovieContract;
 import com.andre.projects.moviesmanager.database.MovieDBHelper;
 import com.andre.projects.moviesmanager.detail_activity.fragments.DetailsFragment;
 import com.andre.projects.moviesmanager.detail_activity.fragments.ReviewsFragment;
 import com.andre.projects.moviesmanager.detail_activity.fragments.TrailersFragment;
-import com.andre.projects.moviesmanager.detail_activity.network_response.ReviewResult;
-import com.andre.projects.moviesmanager.detail_activity.network_response.VideoResult;
-import com.andre.projects.moviesmanager.detail_activity.utils.Mapper;
-import com.andre.projects.moviesmanager.detail_activity.utils.Video;
-import com.andre.projects.moviesmanager.main_activity.MainActivity;
-import com.andre.projects.moviesmanager.network.MovieApiService;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
-import com.squareup.picasso.Picasso;
 
-import java.util.List;
-
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
 
 public class MovieDetailsActivity extends AppCompatActivity {
 
@@ -68,7 +46,8 @@ public class MovieDetailsActivity extends AppCompatActivity {
 
     }
 
-    private BottomNavigationView.OnNavigationItemSelectedListener listener = new BottomNavigationView.OnNavigationItemSelectedListener() {
+    //Listener that manages all fragments and respective calls
+    private final BottomNavigationView.OnNavigationItemSelectedListener listener = new BottomNavigationView.OnNavigationItemSelectedListener() {
         @Override
         public boolean onNavigationItemSelected(@NonNull MenuItem item) {
             Fragment selectedFragment = null;
@@ -87,6 +66,8 @@ public class MovieDetailsActivity extends AppCompatActivity {
                     selectedFragment = new TrailersFragment();
                     break;
 
+                default:
+                    break;
             }
             getSupportFragmentManager().beginTransaction().replace(R.id.cons_layout_details, selectedFragment).commit();
 
@@ -94,6 +75,7 @@ public class MovieDetailsActivity extends AppCompatActivity {
         }
     };
 
+    //Method to inflate Details menu resources
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater inflater = getMenuInflater();
@@ -101,6 +83,7 @@ public class MovieDetailsActivity extends AppCompatActivity {
         return true;
     }
 
+    //Method that manages clicks on menu buttons
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         int id = item.getItemId();
@@ -109,17 +92,21 @@ public class MovieDetailsActivity extends AppCompatActivity {
             onBackPressed();
         }else if(id == R.id.action_add_favorites){
             databaseInsert();
+        } else if(id == R.id.action_details_refresh){
+            finish();
+            overridePendingTransition(0,0);
+            startActivity(getIntent());
+            overridePendingTransition(0,0);
         }
 
 
         return super.onOptionsItemSelected(item);
     }
 
+    //Method that inserts or deletes a movie on the favorite table of database
     public void databaseInsert(){
 
         SQLiteDatabase db = mOpenHelper.getWritableDatabase();
-
-        String[] selectionArgs = {intent.getStringExtra("Id")};
 
         ContentValues cv = new ContentValues();
         cv.put(MovieContract.MovieEntry.MOVIE_ID, intent.getStringExtra("Id"));

@@ -8,6 +8,9 @@ import java.util.List;
 
 public class Mapper {
 
+    private Mapper(){}
+
+    //Method that creates a list of reviews based on API call
     public static List<Review> responseToReview (List<ReviewResponse> reviewResponses){
         List<Review> lista = new ArrayList<>();
 
@@ -17,6 +20,7 @@ public class Mapper {
         return lista;
     }
 
+    //Method that creates a list of trailers based on API call
     public static List<Video> responseToVideo (List<VideoResponse> videoResponses){
 
         List<Video> list = new ArrayList<>();

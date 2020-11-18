@@ -13,7 +13,7 @@ android {
         versionCode 1
         versionName "1.0"
 
-        buildConfigField("String", "MovieDBKey", MovieDBKey)
+        manifestPlaceholders = [ MovieDBKey:getApiKey()]
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
@@ -23,6 +23,11 @@ android {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
+
+        applicationVariants.all { variant ->
+            variant.buildConfigField "String", "MovieDBKey", "\""+getApiKey()+"\""
+        }
+
     }
 
     compileOptions {
@@ -50,4 +55,10 @@ dependencies {
     testImplementation 'junit:junit:4.+'
     androidTestImplementation 'androidx.test.ext:junit:1.1.2'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.3.0'
+}
+
+def getApiKey(){
+    def Properties props = new Properties()
+    props.load(new FileInputStream(new File('secrets.properties')))
+    return props['MovieDBKey']
 }

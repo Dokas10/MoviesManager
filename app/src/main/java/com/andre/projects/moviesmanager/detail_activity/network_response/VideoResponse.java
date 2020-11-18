@@ -2,6 +2,7 @@ package com.andre.projects.moviesmanager.detail_activity.network_response;
 
 import com.squareup.moshi.Json;
 
+//Class that manages trailer attributes based on the API call
 public class VideoResponse {
 
     @Json(name="name")

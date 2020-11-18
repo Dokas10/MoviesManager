@@ -10,7 +10,8 @@ import androidx.recyclerview.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Toast;
+import android.widget.LinearLayout;
+import android.widget.TextView;
 
 import com.andre.projects.moviesmanager.BuildConfig;
 import com.andre.projects.moviesmanager.R;
@@ -27,14 +28,26 @@ public class ReviewsFragment extends Fragment {
 
     private View view;
 
-    private ReviewsRecyclerViewAdapter adapterReviews;
-    private RecyclerView rv_reviews;
+    private TextView error;
+    private TextView rev;
+    private LinearLayout layout;
 
+    private ReviewsRecyclerViewAdapter adapterReviews;
+
+    //Details fragment inflater and view content set
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
+
         view = inflater.inflate(R.layout.fragment_reviews, container, false);
+
+        layout = (LinearLayout) view.findViewById(R.id.lay_rev);
+        error = (TextView) view.findViewById(R.id.rev_error);
+        rev = (TextView) view.findViewById(R.id.reviews);
+
+        error.setVisibility(View.INVISIBLE);
+        layout.setVisibility(View.VISIBLE);
+        rev.setVisibility(View.VISIBLE);
 
         Intent intent = getActivity().getIntent();
 
@@ -43,7 +56,10 @@ public class ReviewsFragment extends Fragment {
         return view;
     }
 
+    //Method to configure reviews recyclerview adapter
     private void configureAdapterReviews() {
+
+        RecyclerView rv_reviews;
         rv_reviews = view.findViewById(R.id.rv_reviews);
         rv_reviews.setLayoutManager(new LinearLayoutManager(getActivity()));
 
@@ -51,6 +67,7 @@ public class ReviewsFragment extends Fragment {
         rv_reviews.setAdapter(adapterReviews);
     }
 
+    //Method to obtain reviews based on movie id
     private void obtainReviews(String id) {
         MovieApiService.getInstance().obtainReviews(id, BuildConfig.MovieDBKey).enqueue(new Callback<ReviewResult>() {
             @Override
@@ -69,7 +86,12 @@ public class ReviewsFragment extends Fragment {
         });
     }
 
+    //Method to show message to show connection error
     public void showError() {
-        Toast.makeText(getActivity(), "Error occurred, please try again later.", Toast.LENGTH_SHORT).show();
+
+        layout.setVisibility(View.INVISIBLE);
+        error.setVisibility(View.VISIBLE);
+        rev.setVisibility(View.INVISIBLE);
+
     }
 }

@@ -10,10 +10,13 @@ public class MovieDBHelper extends SQLiteOpenHelper {
 
     private static final int DATABASE_VERSION = 1;
 
+
+    //Database Constructor
     public MovieDBHelper(Context context){
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
     }
 
+    //Execute method for table creation in database
     @Override
     public void onCreate(SQLiteDatabase db) {
 
@@ -29,6 +32,8 @@ public class MovieDBHelper extends SQLiteOpenHelper {
 
     }
 
+
+    //Drops database table if it is updated
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
         db.execSQL("DROP TABLE IF EXISTS " + MovieContract.MovieEntry.TABLE_NAME);

@@ -5,7 +5,6 @@ import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.drawerlayout.widget.DrawerLayout;
-import androidx.lifecycle.Lifecycle;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -15,15 +14,15 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.os.Bundle;
+import android.os.Parcelable;
+import android.os.PersistableBundle;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.SearchView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.andre.projects.moviesmanager.BuildConfig;
 import com.andre.projects.moviesmanager.database.MovieContract;
@@ -46,7 +45,6 @@ import retrofit2.Response;
 public class MainActivity extends AppCompatActivity implements RecyclerViewAdapter.ItemClickListener {
 
     public static RecyclerViewAdapter adapter;
-    public static RecyclerView rv;
     private DrawerLayout drawer;
     private ActionBarDrawerToggle toggle;
     public List<Movie> mData;
@@ -56,8 +54,12 @@ public class MainActivity extends AppCompatActivity implements RecyclerViewAdapt
     private static boolean IS_FAVORITE_SELECTED = false;
     private RelativeLayout layout;
 
+    public static GridLayoutManager mLayoutManager;
+    public static RecyclerView rv;
+
     private static int numberGridColumns;
 
+    //Instances of all views and treatment of navigation bar clicks
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -117,8 +119,7 @@ public class MainActivity extends AppCompatActivity implements RecyclerViewAdapt
         });
     }
 
-
-
+    //Method to detect recycler view scroll reaching top or bottom for popular movies and change pages
     private void rvScrollListenerPopularity(){
         i=1;
         rv.addOnScrollListener(new RecyclerView.OnScrollListener() {
@@ -144,6 +145,7 @@ public class MainActivity extends AppCompatActivity implements RecyclerViewAdapt
         });
     }
 
+    //Method to detect recycler view scroll reaching top or bottom for top rated movies and change pages
     private void rvScrollListenerTop(){
         i=1;
         rv.addOnScrollListener(new RecyclerView.OnScrollListener() {
@@ -169,15 +171,18 @@ public class MainActivity extends AppCompatActivity implements RecyclerViewAdapt
         });
     }
 
+    //Method to configure adapter for the movie RecyclerView
     private void configureAdapter(int columnsGrid){
         rv = findViewById(R.id.rv_movie);
-        rv.setLayoutManager(new GridLayoutManager(MainActivity.this, columnsGrid));
+        mLayoutManager = new GridLayoutManager(MainActivity.this, columnsGrid);
+        rv.setLayoutManager(mLayoutManager);
 
         adapter = new RecyclerViewAdapter();
         adapter.setClickListener(MainActivity.this);
         rv.setAdapter(adapter);
     }
 
+    //Method to obtain top rated movies from API database
     private void obtainMoviesByTopRated(int i){
         MovieApiService.getInstance().obtainMoviesTop(i, BuildConfig.MovieDBKey).enqueue(new Callback<FilmResult>() {
             @Override
@@ -197,6 +202,7 @@ public class MainActivity extends AppCompatActivity implements RecyclerViewAdapt
         });
     }
 
+    //Method to obtain Popular movies from API database
     private void obtainMoviesByPopularity(int i){
         MovieApiService.getInstance().obtainMoviesPopular(i, BuildConfig.MovieDBKey).enqueue(new Callback<FilmResult>() {
             @Override
@@ -216,6 +222,7 @@ public class MainActivity extends AppCompatActivity implements RecyclerViewAdapt
         });
     }
 
+    //Method to obtain favorite movies from local database
     private List<Movie> obtainMoviesByFavourite(){
 
         List<Movie> favorites = new ArrayList<>();
@@ -246,6 +253,7 @@ public class MainActivity extends AppCompatActivity implements RecyclerViewAdapt
 
     }
 
+    //Method to obtain movies by search from API database
     private void obtainMovieBySearch(String search){
         MovieApiService.getInstance().obtainMoviesBySearch(search, BuildConfig.MovieDBKey).enqueue(new Callback<FilmResult>() {
             @Override
@@ -265,12 +273,14 @@ public class MainActivity extends AppCompatActivity implements RecyclerViewAdapt
         });
     }
 
+    //Method that shows error messages
     public void showError(){
         error.setVisibility(View.VISIBLE);
         layout.setVisibility(View.INVISIBLE);
 
     }
 
+    //OnClick handler for all RecyclerView itens
     @Override
     public void onItemClick(View view, int position) {
         Intent intent = new Intent(this, MovieDetailsActivity.class);
@@ -283,6 +293,7 @@ public class MainActivity extends AppCompatActivity implements RecyclerViewAdapt
         startActivity(intent);
     }
 
+    //Create main menu layout
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater inflater = getMenuInflater();
@@ -310,6 +321,7 @@ public class MainActivity extends AppCompatActivity implements RecyclerViewAdapt
         return true;
     }
 
+    //Treatment of action click for all itens in the action bar and navigation bar
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
 

@@ -3,6 +3,7 @@ package com.andre.projects.moviesmanager.network;
 import retrofit2.Retrofit;
 import retrofit2.converter.moshi.MoshiConverterFactory;
 
+//Class that initializes an instance of the connection to the API
 public class MovieApiService {
 
     private static MovieInterface INSTANCE;

@@ -2,7 +2,7 @@ package com.andre.projects.moviesmanager.main_activity.network.response;
 
 import com.squareup.moshi.Json;
 
-
+//Class that manages and get movie attributes based on API call
 public class MovieResponse {
 
     @Json(name = "poster_path")

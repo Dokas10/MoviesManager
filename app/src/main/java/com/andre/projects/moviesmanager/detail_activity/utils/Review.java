@@ -1,9 +1,10 @@
 package com.andre.projects.moviesmanager.detail_activity.utils;
 
+// Class that defines object of type Review
 public class Review {
 
-    private String author;
-    private String content;
+    private final String author;
+    private final String content;
 
     public Review(String author, String content) {
         this.author = author;
