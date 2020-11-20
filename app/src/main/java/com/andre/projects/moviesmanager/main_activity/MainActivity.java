@@ -55,7 +55,6 @@ public class MainActivity extends AppCompatActivity implements RecyclerViewAdapt
     private RelativeLayout layout;
 
     private final String KEY_STATE = "key_state";
-    private static Bundle mBundleRecyclerViewState;
 
     public static GridLayoutManager mLayoutManager;
     public RecyclerView rv;
@@ -340,26 +339,4 @@ public class MainActivity extends AppCompatActivity implements RecyclerViewAdapt
         return toggle.onOptionsItemSelected(item) || super.onOptionsItemSelected(item);
     }
 
-    @Override
-    protected void onPause()
-    {
-        super.onPause();
-
-        // save RecyclerView state
-        mBundleRecyclerViewState = new Bundle();
-        Parcelable listState = rv.getLayoutManager().onSaveInstanceState();
-        mBundleRecyclerViewState.putParcelable(KEY_STATE, listState);
-    }
-
-    @Override
-    protected void onResume()
-    {
-        super.onResume();
-
-        // restore RecyclerView state
-        if (mBundleRecyclerViewState != null) {
-            Parcelable listState = mBundleRecyclerViewState.getParcelable(KEY_STATE);
-            rv.getLayoutManager().onRestoreInstanceState(listState);
-        }
-    }
 }
