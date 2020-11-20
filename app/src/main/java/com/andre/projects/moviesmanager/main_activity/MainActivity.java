@@ -54,14 +54,17 @@ public class MainActivity extends AppCompatActivity implements RecyclerViewAdapt
     private static boolean IS_FAVORITE_SELECTED = false;
     private RelativeLayout layout;
 
+    private final String KEY_STATE = "key_state";
+    private static Bundle mBundleRecyclerViewState;
+
     public static GridLayoutManager mLayoutManager;
-    public static RecyclerView rv;
+    public RecyclerView rv;
 
     private static int numberGridColumns;
 
     //Instances of all views and treatment of navigation bar clicks
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    protected void onCreate(final Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
@@ -77,7 +80,7 @@ public class MainActivity extends AppCompatActivity implements RecyclerViewAdapt
         error.setVisibility(View.INVISIBLE);
         layout.setVisibility(View.VISIBLE);
 
-        if(getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE)
+        if (getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE)
             numberGridColumns = 3;
         else
             numberGridColumns = 2;
@@ -87,7 +90,7 @@ public class MainActivity extends AppCompatActivity implements RecyclerViewAdapt
         rvScrollListenerPopularity();
 
         drawer = findViewById(R.id.draw_lay);
-        toggle = new ActionBarDrawerToggle(this, drawer,R.string.open_nav,R.string.close_nav);
+        toggle = new ActionBarDrawerToggle(this, drawer, R.string.open_nav, R.string.close_nav);
         toggle.setDrawerIndicatorEnabled(true);
         drawer.addDrawerListener(toggle);
         toggle.syncState();
@@ -98,17 +101,17 @@ public class MainActivity extends AppCompatActivity implements RecyclerViewAdapt
             public boolean onNavigationItemSelected(@NonNull MenuItem item) {
                 int id = item.getItemId();
 
-                if(id == R.id.top_rated){
+                if (id == R.id.top_rated) {
                     IS_FAVORITE_SELECTED = false;
                     configureAdapter(numberGridColumns);
                     obtainMoviesByTopRated(1);
                     rvScrollListenerTop();
-                } else if(id == R.id.popular){
+                } else if (id == R.id.popular) {
                     IS_FAVORITE_SELECTED = false;
                     configureAdapter(numberGridColumns);
                     obtainMoviesByPopularity(1);
                     rvScrollListenerPopularity();
-                }else{
+                } else {
                     IS_FAVORITE_SELECTED = true;
                     configureAdapter(numberGridColumns);
                     mData = obtainMoviesByFavourite();
@@ -120,25 +123,25 @@ public class MainActivity extends AppCompatActivity implements RecyclerViewAdapt
     }
 
     //Method to detect recycler view scroll reaching top or bottom for popular movies and change pages
-    private void rvScrollListenerPopularity(){
-        i=1;
+    private void rvScrollListenerPopularity() {
+        i = 1;
         rv.addOnScrollListener(new RecyclerView.OnScrollListener() {
             @Override
             public void onScrollStateChanged(@NonNull RecyclerView recyclerView, int newState) {
                 super.onScrollStateChanged(recyclerView, newState);
-                if(!rv.canScrollVertically(1) && newState==RecyclerView.SCROLL_STATE_IDLE && !IS_FAVORITE_SELECTED) {
-                    if(i == 1000)
+                if (!rv.canScrollVertically(1) && newState == RecyclerView.SCROLL_STATE_IDLE && !IS_FAVORITE_SELECTED) {
+                    if (i == 1000)
                         return;
                     else
                         i++;
                     rv.scrollToPosition(0);
                     obtainMoviesByPopularity(i);
-                } else if(!rv.canScrollVertically(-1) && newState==RecyclerView.SCROLL_STATE_IDLE && !IS_FAVORITE_SELECTED) {
-                    if(i == 1)
+                } else if (!rv.canScrollVertically(-1) && newState == RecyclerView.SCROLL_STATE_IDLE && !IS_FAVORITE_SELECTED) {
+                    if (i == 1)
                         return;
                     else
                         i--;
-                    rv.scrollToPosition(adapter.getItemCount()-1);
+                    rv.scrollToPosition(adapter.getItemCount() - 1);
                     obtainMoviesByPopularity(i);
                 }
             }
@@ -335,5 +338,28 @@ public class MainActivity extends AppCompatActivity implements RecyclerViewAdapt
         }
 
         return toggle.onOptionsItemSelected(item) || super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    protected void onPause()
+    {
+        super.onPause();
+
+        // save RecyclerView state
+        mBundleRecyclerViewState = new Bundle();
+        Parcelable listState = rv.getLayoutManager().onSaveInstanceState();
+        mBundleRecyclerViewState.putParcelable(KEY_STATE, listState);
+    }
+
+    @Override
+    protected void onResume()
+    {
+        super.onResume();
+
+        // restore RecyclerView state
+        if (mBundleRecyclerViewState != null) {
+            Parcelable listState = mBundleRecyclerViewState.getParcelable(KEY_STATE);
+            rv.getLayoutManager().onRestoreInstanceState(listState);
+        }
     }
 }
